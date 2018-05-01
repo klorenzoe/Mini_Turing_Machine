@@ -1,0 +1,78 @@
+﻿
+<div>
+    <br />
+    <h3>Palíntromos</h3>
+    <button type="button" class="btn btn-primary pull-right" id="btnPalindrome">
+        <span class="glyphicon glyphicon-ok" style="color:white"> Analizar </span>
+    </button>
+    @Html.TextArea("Text", new { @class = "form-control col-lg-12", @placeholder = "Ej: abcba", @style = "margin: 0px 863px 0px 0px; width: 276px; height: 34px; resize: none;", @id="txtPalindrome" }) 
+</div>
+
+<br />
+<div id="response"></div>
+
+<div class="jumbotron" id="jbmPalindromes">
+</div>
+
+<script type="text/javascript">
+    debugger;
+    $(document).ready(function () {
+
+        $("#btnPalindrome").click(function (e) {
+            e.preventDefault();
+            if($('#txtPalindrome').val())
+            {
+                clear();
+                $.ajax({
+                    type: 'POST',
+                    url: "@Url.Action("Validate", "ValidatePalindromes")",
+                    data: { input: $('#txtPalindrome').val() },
+                    success: function (data) {
+                        //Alert if the result was true or false
+                        if (data.success) {
+                            $('#response').addClass("alert alert-success");
+                            $('#response').append('<strong>Success!</strong>La entrada es un palindromo');
+                        }
+                        else
+                        {
+                            $('#response').addClass("alert alert-danger");
+                            $('#response').append('<strong>Fail!</strong> La entrada no es un palindromo');
+                        }
+
+                        //return the automata process
+                        for (var i = 0; i < data.result.length; i++) {
+                            var chars = data.result[i].inputChanged.split('');
+
+                            var content = '<table width="400" align="center" name="tableResult"> <tr>';
+                            debugger;
+                            for (k = 0; k < chars.length; k++) {
+                                if (k == data.result[i].indexHead)
+                                { content += '<td bgcolor = "#58CCB6" align="center">' + '' + chars[k] + '' + '</td>'; }
+                                else
+                                { content += '<td align="center">' + '' + chars[k] + '' + '</td>'; }
+                            }
+                            content += "</tr></table>"
+
+                            debugger;
+                            $('#jbmPalindromes').append(content);
+
+                            //setTimeout(function () {
+                            //    $('#tableResult').remove();
+                            //}, 2000);
+                    }
+                  
+                }
+            });}
+        });
+
+        function clear()
+        {
+            debugger;
+            $("#response").removeClass("alert alert-success");
+            $("#response").removeClass("alert alert-danger");
+            $("#response").empty();
+            $("table[name^=tableResult]").remove();
+        }
+        });
+</script>
+
