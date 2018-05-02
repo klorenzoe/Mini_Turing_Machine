@@ -2,44 +2,41 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
 using TuringMachine.Models;
 
-namespace TuringMachine.Controllers
+namespace TuringMachine.Code
 {
-    public class ValidatePalindromesController : Controller
+    public class ExecuteAutomata
     {
         string currentState = "q0";
+        string acceptanceStatus = "";
         int currentIndex = 1;
         List<State> automataStates = new List<State>();
         List<Result> ResultList = new List<Result>();
 
-        // GET: ValidatePalindromes
-        public ActionResult Palindromes()
+        public void beforeExecute(string acceptanceStatus_, List<State> automataStates_)
         {
-            return View();
+            acceptanceStatus = acceptanceStatus_;
+            automataStates = automataStates_;
         }
 
-        // POST: ValidatePalindromes
-        [HttpPost]
-        public ActionResult Validate(string input)
+        public List<Result> Execute(string input, ref bool isValid)
         {
-            AutomataHelper.fillAutomatas();
-            automataStates = AutomataHelper.palindromesAutomata;
             try
             {
                 ValidateTheInputWithTransitions(input);
-                return Json(new { success = true, result = ResultList });
+                isValid = true;
             }
-            catch
+            catch (Exception e)
             {
-                return Json(new { success = false, result = ResultList });
+                isValid = false;
             }
+            return ResultList;
         }
 
         private void ValidateTheInputWithTransitions(string input)
         {
-             input = "#" + input + "#";
+            input = "#" + input + "#";
 
             ResultList.Add(new Result()
             {
@@ -47,14 +44,14 @@ namespace TuringMachine.Controllers
                 inputChanged = input
             });
 
-            
+
             var inputArray = input.ToList();
             while (true)
             {
                 var thisState = automataStates.Find(x => x.currentState == currentState);
                 var thisTransition = thisState.possibleTransitions.Find(x => x.currentSymbol == inputArray[currentIndex].ToString());
                 inputArray[currentIndex] = char.Parse(thisTransition.transitionSymbol); //change the symbol with the new symbol
-                MakingTransition(thisTransition, String.Join("",inputArray));
+                MakingTransition(thisTransition, String.Join("", inputArray));
 
                 if (inputArray[inputArray.Count - 1] != '#')
                 {
@@ -65,7 +62,8 @@ namespace TuringMachine.Controllers
             }
         }
 
-        private void MakingTransition(Transition tran, string input) {
+        private void MakingTransition(Transition tran, string input)
+        {
             //change the current state
             currentState = tran.transitionState;
 
@@ -84,9 +82,10 @@ namespace TuringMachine.Controllers
 
         }
 
-        private bool IsAcceptanceStatus(string state_) {
-            return state_ == "q8" ? true : false;
+        private bool IsAcceptanceStatus(string state_)
+        {
+            return state_ == acceptanceStatus ? true : false;
         }
-       
+
     }
 }

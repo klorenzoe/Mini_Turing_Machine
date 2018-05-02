@@ -1,11 +1,10 @@
-﻿
-<div>
+﻿<div>
     <br />
-    <h3>Palíntromos</h3>
+    <h3>@ViewBag.Title</h3>
     <button type="button" class="btn btn-primary pull-right" id="btnPalindrome">
         <span class="glyphicon glyphicon-ok" style="color:white"> Analizar </span>
     </button>
-    @Html.TextArea("Text", new { @class = "form-control col-lg-12", @placeholder = "Ej: abcba", @style = "margin: 0px 863px 0px 0px; width: 276px; height: 34px; resize: none;", @id="txtPalindrome" }) 
+    @Html.TextArea("Text", new { @class = "form-control col-lg-12", @placeholder = @ViewBag.Example, @style = "margin: 0px 863px 0px 0px; width: 276px; height: 34px; resize: none;", @id="txtPalindrome" }) 
 </div>
 
 <br />
@@ -20,23 +19,24 @@
 
         $("#btnPalindrome").click(function (e) {
             e.preventDefault();
+            debugger;
             if($('#txtPalindrome').val())
             {
                 clear();
                 $.ajax({
                     type: 'POST',
-                    url: "@Url.Action("Validate", "ValidatePalindromes")",
+                    url: "@Url.Action(@ViewBag.Validate, "Automatas")",
                     data: { input: $('#txtPalindrome').val() },
                     success: function (data) {
                         //Alert if the result was true or false
                         if (data.success) {
                             $('#response').addClass("alert alert-success");
-                            $('#response').append('<strong>Success!</strong>La entrada es un palindromo');
+                            $('#response').append('<strong>Success!</strong> @ViewBag.SuccessMessage');
                         }
                         else
                         {
                             $('#response').addClass("alert alert-danger");
-                            $('#response').append('<strong>Fail!</strong> La entrada no es un palindromo');
+                            $('#response').append('<strong>Fail!</strong> @ViewBag.FailMessage');
                         }
 
                         //return the automata process
@@ -67,7 +67,6 @@
 
         function clear()
         {
-            debugger;
             $("#response").removeClass("alert alert-success");
             $("#response").removeClass("alert alert-danger");
             $("#response").empty();
@@ -75,4 +74,3 @@
         }
         });
 </script>
-

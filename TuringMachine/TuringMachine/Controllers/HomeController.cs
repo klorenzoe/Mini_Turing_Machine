@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Threading;
+using TuringMachine.Code;
 
 namespace TuringMachine.Controllers
 {
@@ -11,7 +12,7 @@ namespace TuringMachine.Controllers
     {
         public ActionResult Index()
         {
-            AutomataHelper.fillAutomatas();
+            Filler.fillAutomatas();
             return View();
         }
     }
