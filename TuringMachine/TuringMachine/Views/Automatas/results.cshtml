@@ -17,6 +17,8 @@
     debugger;
     $(document).ready(function () {
 
+        var i = 0;
+        var myInterval;
         $("#btnPalindrome").click(function (e) {
             e.preventDefault();
             debugger;
@@ -40,26 +42,8 @@
                         }
 
                         //return the automata process
-                        for (var i = 0; i < data.result.length; i++) {
-                            var chars = data.result[i].inputChanged.split('');
-
-                            var content = '<table width="400" align="center" name="tableResult"> <tr>';
-                            debugger;
-                            for (k = 0; k < chars.length; k++) {
-                                if (k == data.result[i].indexHead)
-                                { content += '<td bgcolor = "#58CCB6" align="center">' + '' + chars[k] + '' + '</td>'; }
-                                else
-                                { content += '<td align="center">' + '' + chars[k] + '' + '</td>'; }
-                            }
-                            content += "</tr></table>"
-
-                            debugger;
-                            $('#jbmPalindromes').append(content);
-
-                            //setTimeout(function () {
-                            //    $('#tableResult').remove();
-                            //}, 2000);
-                    }
+                        debugger;
+                        DibujarTabla(data);
                   
                 }
             });}
@@ -71,6 +55,40 @@
             $("#response").removeClass("alert alert-danger");
             $("#response").empty();
             $("table[name^=tableResult]").remove();
+        }
+
+        function DibujarTabla(data)
+        {
+            myInterval = window.setInterval(function () {
+                debugger;
+                if (i < data.result.length) {
+                    //Borrar el contenido actual
+                    $("table[name^=tableResult]").remove();
+
+                    //Dibujar el nuevo contenido
+                    var chars = data.result[i].inputChanged.split('');
+
+                    var content = '<table width="400" align="center" name="tableResult"> <tr>';
+                    debugger;
+                    for (k = 0; k < chars.length; k++) {
+                        if (k == data.result[i].indexHead)
+                        { content += '<td bgcolor = "#58CCB6" align="center">' + '' + chars[k] + '' + '</td>'; }
+                        else
+                        { content += '<td align="center">' + '' + chars[k] + '' + '</td>'; }
+                    }
+                    content += "</tr></table>";
+
+
+                    $('#jbmPalindromes').append(content);
+                    i++;
+                } else
+                {
+                    clearInterval(myInterval);
+                    i = 0;
+                }
+
+
+            }, 500);
         }
         });
 </script>

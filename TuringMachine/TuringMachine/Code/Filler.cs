@@ -12,6 +12,8 @@ namespace TuringMachine.Code
         private static bool AreTheAutomatasFilled = false;
         public static List<State> palindromesAutomata { get; set; }
         public static List<State> replicatePatternAutomata { get; set; }
+        public static List<State> unaryMultiplicationAutomata { get; set; }
+        public static List<State> unarySumAutomata { get; set; }
 
 
         public static void fillAutomatas() {
@@ -19,6 +21,8 @@ namespace TuringMachine.Code
             {
                 palindromesAutomata = fillPalindromesStatus();
                 replicatePatternAutomata = fillReplicatePatternStatus();
+                unaryMultiplicationAutomata = fillUnaryMultiplicationStatus();
+                unarySumAutomata = fillUnarySumStatus();
                 AreTheAutomatasFilled = true;
             }
         }
@@ -299,7 +303,193 @@ namespace TuringMachine.Code
             return automataStates;
         }
 
-#endregion
+        private static List<State> fillUnaryMultiplicationStatus()
+        {
+            //q0
+            var q0 = new State()
+            {
+                currentState = "q0",
+                possibleTransitions = new List<Transition>()
+                {
+                    new Transition() { currentSymbol = "|", transitionState="q0", transitionSymbol="|", movement="R"},
+                    new Transition() { currentSymbol = "*", transitionState="q0", transitionSymbol="*", movement="R"},
+                    new Transition() { currentSymbol = "#", transitionState="q1", transitionSymbol="=", movement="L"}
+
+                }
+            };
+            //q1
+            var q1 = new State()
+            {
+                currentState = "q1",
+                possibleTransitions = new List<Transition>()
+                {
+                    new Transition() { currentSymbol = "|", transitionState="q1", transitionSymbol="|", movement="L"},
+                    new Transition() { currentSymbol = "*", transitionState="q1", transitionSymbol="*", movement="L"},
+                    new Transition() { currentSymbol = "#", transitionState="q2", transitionSymbol="#", movement="R"}
+                }
+            };
+            //q2
+            var q2 = new State()
+            {
+                currentState = "q2",
+                possibleTransitions = new List<Transition>()
+                {
+                    new Transition() { currentSymbol = "|", transitionState="q3", transitionSymbol="#", movement="R"},
+                    new Transition() { currentSymbol = "*", transitionState="q9", transitionSymbol="#", movement="R"}
+                 }
+            };
+            //q3
+            var q3 = new State()
+            {
+                currentState = "q3",
+                possibleTransitions = new List<Transition>()
+                {
+                    new Transition() { currentSymbol = "|", transitionState="q3", transitionSymbol="|", movement="R"},
+                    new Transition() { currentSymbol = "*", transitionState="q4", transitionSymbol="*", movement="R"}
+                }
+            };
+            //q4
+            var q4 = new State()
+            {
+                currentState = "q4",
+                possibleTransitions = new List<Transition>()
+                {
+                    new Transition() { currentSymbol = "|", transitionState="q5", transitionSymbol="u", movement="R"},
+                    new Transition() { currentSymbol = "=", transitionState="q7", transitionSymbol="=", movement="L"}
+                }
+            };
+            //q5
+            var q5 = new State()
+            {
+                currentState = "q5",
+                possibleTransitions = new List<Transition>()
+                {
+                    new Transition() { currentSymbol = "|", transitionState="q5", transitionSymbol="|", movement="R"},
+                    new Transition() { currentSymbol = "*", transitionState="q5", transitionSymbol="*", movement="R"},
+                    new Transition() { currentSymbol = "=", transitionState="q5", transitionSymbol="=", movement="R"},
+                    new Transition() { currentSymbol = "#", transitionState="q6", transitionSymbol="|", movement="L"},
+                 }
+            };
+            //q6
+            var q6 = new State()
+            {
+                currentState = "q6",
+                possibleTransitions = new List<Transition>()
+                {
+                    new Transition() { currentSymbol = "|", transitionState="q6", transitionSymbol="|", movement="L"},
+                    new Transition() { currentSymbol = "*", transitionState="q6", transitionSymbol="*", movement="L"},
+                    new Transition() { currentSymbol = "=", transitionState="q6", transitionSymbol="=", movement="L"},
+                    new Transition() { currentSymbol = "u", transitionState="q4", transitionSymbol="u", movement="R"}
+
+                }
+            };
+            //q7
+            var q7 = new State()
+            {
+                currentState = "q7",
+                possibleTransitions = new List<Transition>()
+                {
+                    new Transition() { currentSymbol = "*", transitionState="q8", transitionSymbol="*", movement="L"},
+                    new Transition() { currentSymbol = "u", transitionState="q7", transitionSymbol="|", movement="L"},
+                }
+            };
+            //q8
+            var q8 = new State()
+            {
+                currentState = "q8",
+                possibleTransitions = new List<Transition>()
+                {
+                    new Transition() { currentSymbol = "|", transitionState="q8", transitionSymbol="|", movement="L"},
+                    new Transition() { currentSymbol = "#", transitionState="q2", transitionSymbol="#", movement="R"},
+                }
+            };
+            //q9
+            var q9 = new State()
+            {
+                currentState = "q9",
+                possibleTransitions = new List<Transition>()
+                {
+                    new Transition() { currentSymbol = "|", transitionState="q9", transitionSymbol="#", movement="R"},
+                    new Transition() { currentSymbol = "=", transitionState="q10", transitionSymbol="#", movement="R"},
+                }
+            };
+            //q10
+
+            var automataStates = new List<State>();
+            automataStates.Add(q0);
+            automataStates.Add(q1);
+            automataStates.Add(q2);
+            automataStates.Add(q3);
+            automataStates.Add(q4);
+            automataStates.Add(q5);
+            automataStates.Add(q6);
+            automataStates.Add(q7);
+            automataStates.Add(q8);
+            automataStates.Add(q9);
+            return automataStates;
+        }
+
+        private static List<State> fillUnarySumStatus()
+        {
+            //q0
+            var q0 = new State()
+            {
+                currentState = "q0",
+                possibleTransitions = new List<Transition>()
+                {
+                    new Transition() { currentSymbol = "|", transitionState="q0", transitionSymbol="|", movement="R"},
+                    new Transition() { currentSymbol = "+", transitionState="q0", transitionSymbol="+", movement="R"},
+                    new Transition() { currentSymbol = "#", transitionState="q1", transitionSymbol="=", movement="L"}
+
+                }
+            };
+            //q1
+            var q1 = new State()
+            {
+                currentState = "q1",
+                possibleTransitions = new List<Transition>()
+                {
+                    new Transition() { currentSymbol = "|", transitionState="q1", transitionSymbol="|", movement="L"},
+                    new Transition() { currentSymbol = "+", transitionState="q1", transitionSymbol="+", movement="L"},
+                    new Transition() { currentSymbol = "#", transitionState="q2", transitionSymbol="#", movement="R"},
+                    new Transition() { currentSymbol = "=", transitionState="q1", transitionSymbol="=", movement="L"}
+                }
+            };
+            //q2
+            var q2 = new State()
+            {
+                currentState = "q2",
+                possibleTransitions = new List<Transition>()
+                {
+                    new Transition() { currentSymbol = "|", transitionState="q3", transitionSymbol="#", movement="R"},
+                    new Transition() { currentSymbol = "+", transitionState="q2", transitionSymbol="#", movement="R"},
+                    new Transition() { currentSymbol = "=", transitionState="q4", transitionSymbol="#", movement="R"}
+                }
+            };
+            //q3
+            var q3 = new State()
+            {
+                currentState = "q3",
+                possibleTransitions = new List<Transition>()
+                {
+                    new Transition() { currentSymbol = "|", transitionState="q3", transitionSymbol="|", movement="R"},
+                    new Transition() { currentSymbol = "+", transitionState="q3", transitionSymbol="+", movement="R"},
+                    new Transition() { currentSymbol = "#", transitionState="q1", transitionSymbol="|", movement="L"},
+                    new Transition() { currentSymbol = "=", transitionState="q3", transitionSymbol="=", movement="R"}
+
+                }
+            };
+            //q4
+            var automataStates = new List<State>();
+            automataStates.Add(q0);
+            automataStates.Add(q1);
+            automataStates.Add(q2);
+            automataStates.Add(q3);
+            return automataStates;
+        }
+
+
+        #endregion
 
     }
 }

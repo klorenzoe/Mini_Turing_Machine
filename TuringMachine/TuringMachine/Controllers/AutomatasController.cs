@@ -57,5 +57,49 @@ namespace TuringMachine.Controllers
         }
 
 
+        //GET: unaryMultiplication
+        public ActionResult UnaryMultiplication()
+        {
+            ViewBag.Title = "Multiplicación de unarios";
+            ViewBag.Validate = "UnaryMultiplication";
+            ViewBag.Example = "Ej: ||*|||";
+            ViewBag.SuccessMessage = "Se ha podido encontrar un resultado";
+            ViewBag.FailMessage = "La entrada no tiene formato válido";
+            return View("results");
+        }
+
+        // POST: unaryMultiplication
+        [HttpPost]
+        public ActionResult UnaryMultiplication(string input)
+        {
+            Filler.fillAutomatas();
+            executer.beforeExecute("q10", Filler.unaryMultiplicationAutomata);
+            var isValid = false;
+            var resultList = executer.Execute(input, ref isValid);
+            return Json(new { success = isValid, result = resultList });
+        }
+
+        //GET: unarySum
+        public ActionResult UnarySum()
+        {
+            ViewBag.Title = "Suma de unarios";
+            ViewBag.Validate = "UnarySum";
+            ViewBag.Example = "Ej: |||+||";
+            ViewBag.SuccessMessage = "Se ha podido encontrar un resultado";
+            ViewBag.FailMessage = "La entrada no tiene formato válido";
+            return View("results");
+        }
+
+        // POST: unarySum
+        [HttpPost]
+        public ActionResult UnarySum(string input)
+        {
+            Filler.fillAutomatas();
+            executer.beforeExecute("q4", Filler.unarySumAutomata);
+            var isValid = false;
+            var resultList = executer.Execute(input, ref isValid);
+            return Json(new { success = isValid, result = resultList });
+        }
+
     }
 }
