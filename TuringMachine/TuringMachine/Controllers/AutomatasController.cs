@@ -101,5 +101,26 @@ namespace TuringMachine.Controllers
             return Json(new { success = isValid, result = resultList });
         }
 
+        //GET: unaryMinus
+        public ActionResult UnaryMinus()
+        {
+            ViewBag.Title = "Resta de unarios";
+            ViewBag.Validate = "UnaryMinus";
+            ViewBag.Example = "Ej: ||||-||";
+            ViewBag.SuccessMessage = "Se ha podido encontrar un resultado";
+            ViewBag.FailMessage = "La entrada no tiene formato válido";
+            return View("results");
+        }
+
+        // POST: unaryMinus
+        [HttpPost]
+        public ActionResult UnaryMinus(string input)
+        {
+            Filler.fillAutomatas();
+            executer.beforeExecute("q8", Filler.unaryMinusAutomata);
+            var isValid = false;
+            var resultList = executer.Execute(input, ref isValid);
+            return Json(new { success = isValid, result = resultList });
+        }
     }
 }
