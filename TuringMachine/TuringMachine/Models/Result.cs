@@ -9,5 +9,6 @@ namespace TuringMachine.Models
     {
         public int indexHead { get; set; }
         public string inputChanged { get; set; }
+        public string currentState { get; set; }
     }
 }

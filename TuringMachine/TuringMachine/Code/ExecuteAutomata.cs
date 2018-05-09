@@ -41,7 +41,8 @@ namespace TuringMachine.Code
             ResultList.Add(new Result()
             {
                 indexHead = currentIndex,
-                inputChanged = input
+                inputChanged = input,
+                currentState = currentState
             });
 
 
@@ -52,12 +53,10 @@ namespace TuringMachine.Code
                 var thisTransition = thisState.possibleTransitions.Find(x => x.currentSymbol == inputArray[currentIndex].ToString());
                 inputArray[currentIndex] = char.Parse(thisTransition.transitionSymbol); //change the symbol with the new symbol
                 MakingTransition(thisTransition, String.Join("", inputArray));
-
                 if (inputArray[inputArray.Count - 1] != '#')
                 {
                     inputArray.Add('#');
                 }
-
                 if (IsAcceptanceStatus(currentState)) break;
             }
         }
@@ -77,7 +76,9 @@ namespace TuringMachine.Code
             ResultList.Add(new Result()
             {
                 indexHead = currentIndex,
-                inputChanged = input
+                inputChanged = input,
+                currentState = currentState
+                
             });
 
         }

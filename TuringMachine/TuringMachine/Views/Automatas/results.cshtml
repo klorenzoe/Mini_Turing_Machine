@@ -1,25 +1,44 @@
-﻿<div>
+﻿<style>
+    .navbar-inverse {
+    background-color: #1F5D6B;
+}
+</style>
+<div>
     <br />
+    @*<div class="pull-right">
+        <a class="btn btn-info btn-xs" style="background-color:#ffcc57; border-color:#ffcc57" id="btnMore">
+            <span class="glyphicon glyphicon-fast-backward"></span>
+        </a>
+        <a class="btn btn-info btn-xs" style="background-color:#ffcc57; border-color:#ffcc57" id="btnLess">
+            <span class="glyphicon glyphicon-fast-forward"></span>
+        </a>
+    </div>*@
     <h3>@ViewBag.Title</h3>
+
     <button type="button" class="btn btn-primary pull-right" id="btnPalindrome">
         <span class="glyphicon glyphicon-ok" style="color:white"> Analizar </span>
     </button>
-    <input type="text" placeholder="@ViewBag.Example" id="txtPalindrome" class="form-control col-lg-12" style="margin: 0px 863px 0px 0px; width: 276px; height: 34px; resize: none;" /> 
-    @*@Html.TextBox("Text", new { @class = "form-control col-lg-12", @placeholder = @ViewBag.Example, @style = "margin: 0px 863px 0px 0px; width: 276px; height: 34px; resize: none;", @id="txtPalindrome" })*@ 
+    
+    <input type="text" placeholder="@ViewBag.Example" id="txtPalindrome" class="form-control col-lg-12" style="margin: 0px 863px 0px 0px; width: 276px; height: 34px; resize: none;" />  
 </div>
 
 <br />
 <div id="response"></div>
 
-<div class="jumbotron" id="jbmPalindromes"></div>
+<div class="jumbotron" id="jbmPalindromes">
+</div>
 
 <div class="pull-right" id="divMovementsCount"></div>
 
+
+<div class="pull-left" id="divCurrentStates"></div>
 <br />
+
+
 
 <script type="text/javascript">
     $(document).ready(function () {
-
+        var speed = 600;
         var i = 0;
         var myInterval;
         $("#btnPalindrome").click(function (e) {
@@ -42,29 +61,53 @@
                             $('#response').addClass("alert alert-danger");
                             $('#response').append('<strong>Fail!</strong> @ViewBag.FailMessage');
                         }
-                        $('#divMovementsCount').append('<strong>Movimientos totales: </strong> '+data.result.length);
+                        
                         //return the automata process
-                        DrawTable(data);
+                        DrawTable(data, speed);
                   
                 }
             });}
         });
 
+        //$('#btnMore').click(function (e) {
+        //    debugger;
+        //    e.preventDefault()
+        //    if (speed > 300)
+        //    {
+        //        speed = speed - 100;
+        //    }
+        //});
+
+        //$('#btnLess').click(function (e) {
+        //    debugger;
+        //    e.preventDefault()
+        //    if (speed < 1000) {
+        //        speed = speed + 100;
+        //    }
+        //});
+
         function clear()
         {
-            $("#response").removeClass("alert alert-success");
-            $("#response").removeClass("alert alert-danger");
-            $("#response").empty();
-            $("table[name^=tableResult]").remove();
+            $('#response').removeClass("alert alert-success");
+            $('#response').removeClass("alert alert-danger");
+            $('#response').empty();
+            $('table[name^=tableResult]').remove();
             $('#divMovementsCount').empty();
+            $('#divCurrentStates').empty();
         }
 
-        function DrawTable(data)
+        function currentRemove()
+        {
+            $("table[name^=tableResult]").remove();
+            $('#divMovementsCount').empty();
+            $('#divCurrentStates').empty();
+        }
+        function DrawTable(data, speed)
         {
             myInterval = window.setInterval(function () {
                 if (i < data.result.length) {
                     //Borrar el contenido actual
-                    $("table[name^=tableResult]").remove();
+                    currentRemove();
 
                     //Dibujar el nuevo contenido
                     var chars = data.result[i].inputChanged.split('');
@@ -80,6 +123,8 @@
 
 
                     $('#jbmPalindromes').append(content);
+                    $('#divCurrentStates').append('<strong>Estado actual: </strong> ' + data.result[i].currentState);
+                    $('#divMovementsCount').append('<strong>Movimientos totales: </strong> ' + (i+1) +''+' de '+''+ data.result.length);
                     i++;
                 } else
                 {
@@ -87,8 +132,8 @@
                     i = 0;
                 }
 
-
-            },500);
+                console.log(speed)
+            },speed);
         }
         });
 </script>
